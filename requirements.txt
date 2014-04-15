@@ -1,0 +1,15 @@
+1.) global persistent chest TestBonesChestRef
+2.) Just ONE "Follow" type package on the actor - used for following  (can have other type packages like "Wander")
+3.) A PlayerFollowersFaction - a follower becomes part of, and is removed when stop following
+4.) all module_scripts are to be added as quest scripts and attatched to quests with the same ID as the module_script minus the SCRIPT substring.
+    i.e.
+      module_script =>   scn MyQuestSCRIPT (save as a quest script)
+      create quest with ID => MyQuest
+5.) functions are to be added as object scripts
+6.) On first timel load, the quests need a minute to initialise variables, then save game for permanent change.
+      
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+some functions not in documentation: https://github.com/nh2/obse/blob/master/obse_whatsnew.txt
+i.e. GetPackageType

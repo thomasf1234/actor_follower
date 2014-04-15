@@ -1,0 +1,31 @@
+scn TF01FunctionMsgBoxFollowingEX
+
+ref actor
+ref actor_follow_package
+int button
+
+begin Function {actor, actor_follow_package, button}
+  
+  SetFunctionValue TF01ModuleCreatureStates.states["normal"]
+  
+  ;"Wait here."
+  if button == 0         
+	actor.Wait actor_follow_package
+    EvaluatePackage
+	
+  ;"Let's trade items"
+  elseif button == 1
+	SetFunctionValue (Call TF01FunctionOpenInventory actor)
+		
+  ;"Summary"
+  elseif button == 2
+    SetFunctionValue (Call TF01FunctionMsgBoxViewSummary actor)
+	
+  ;"It is time for us to part ways."
+  elseif button == 3
+	actor.SetFactionRank PlayerFollowersFaction -1
+			  
+  ;"Nothing." 
+  endif  
+end
+		  

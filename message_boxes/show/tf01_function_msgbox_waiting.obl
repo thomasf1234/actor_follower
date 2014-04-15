@@ -1,0 +1,8 @@
+scn TF01FunctionMsgBoxWaiting
+
+ref actorRef
+
+begin Function {}	
+  MessageBox "What is required of me?" "Follow me." "It is time for us to part ways." "Nothing."	
+  SetFunctionValue TF01ModuleCreatureStates.states["msgbox_waiting"] 
+end

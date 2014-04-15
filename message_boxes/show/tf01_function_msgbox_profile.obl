@@ -1,0 +1,55 @@
+scn TF01FunctionMsgBoxProfile
+
+ref actorRef
+
+float curr_health
+float curr_magicka
+float curr_fatigue
+
+string_var title
+string_var race_msg
+string_var level_msg
+string_var essential_msg
+string_var health_msg
+string_var magicka_msg
+string_var fatigue_msg
+
+begin Function {actorRef}
+  
+    let title        := actorRef.GetName + " Profile" 
+	
+	if actorRef.IsCreature
+	  let race_msg := "Creature type: " + TF01ModuleGlobals.creature_types[actorRef.GetCreatureType]	
+    else
+	  let race_msg := "Race: " + ToString actorRef.GetRace	
+    endif	
+	
+	let level_msg        := " Lv: " + ToString (actorRef.GetLevel) 
+	
+	if actorRef.IsEssential
+	  let essential_msg := "Essential: yes" 
+	else
+	  let essential_msg := "Essential: no" 
+	endif
+		
+	set curr_health to actorRef.GetActorValue Health 
+	set curr_magicka to actorRef.GetActorValue Magicka 
+	set curr_fatigue to actorRef.GetActorValue Fatigue
+	
+    let health_msg      := "Health: "  + (ToString (Floor curr_health)) + "/" + ToString (actorRef.GetBaseActorValue Health)
+    let magicka_msg     := "Magicka: " + (ToString (Floor curr_magicka)) + "/" + ToString (actorRef.GetBaseActorValue Magicka)
+    let fatigue_msg     := "Fatigue: " + (ToString (Floor curr_fatigue)) + "/" + ToString (actorRef.GetBaseActorValue Fatigue)
+ 	
+    ;let class_msg := "Class: " + ToString actorRef.GetClass 
+
+    
+
+    MessageBox $title $race_msg $essential_msg $level_msg $health_msg $magicka_msg $fatigue_msg "____________________" "Cancel"
+	
+	SetFunctionValue TF01ModuleCreatureStates.states["msgbox_profile"]
+end
+
+;http://cs.elderscrolls.com/index.php?title=GetCreatureType
+;get combat style
+;combat, magick, stealth
+;be able to change combat style

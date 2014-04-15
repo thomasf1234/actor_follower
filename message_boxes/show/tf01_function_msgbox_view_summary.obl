@@ -1,0 +1,14 @@
+scn TF01FunctionMsgBoxViewSummary
+
+ref actorRef
+
+string_var title
+
+begin Function {actorRef}
+
+  let title := actorRef.GetName + " summary"  
+
+  MessageBox $title "Profile" "Attributes" "____________________" "Cancel"
+  
+  SetFunctionValue TF01ModuleCreatureStates.states["msgbox_summary"]
+end

@@ -1,0 +1,28 @@
+scn TF01FunctionMsgBoxViewSummaryEX
+
+ref actor
+int button
+
+begin Function {actor, button}
+  
+  SetFunctionValue TF01ModuleCreatureStates.states["normal"]
+  
+  ;"Profile"
+  if button == 0         
+	SetFunctionValue (Call TF01FunctionMsgBoxProfile actor)
+	
+  ;"Attributes"
+  elseif button == 1
+	SetFunctionValue (Call TF01FunctionMsgBoxAttributes actor)
+		
+  ;"____________________"
+  elseif button == 2
+	
+  ;"Cancel"
+  elseif button == 3
+	SetFunctionValue TF01ModuleCreatureStates.states["msgbox_following"]
+			  
+  ;"Nothing." 
+  endif  
+end
+		  

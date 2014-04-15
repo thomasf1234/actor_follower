@@ -1,0 +1,15 @@
+scn TF01FunctionMsgBoxAttributesEX
+
+ref actor
+
+int button
+
+begin Function {actor, button}
+  
+  SetFunctionValue TF01ModuleCreatureStates.states["normal"]
+  
+  ;"Cancel"
+  if button == 9 ;last button
+	SetFunctionValue (Call TF01FunctionMsgBoxViewSummary actor)
+  endif  
+end

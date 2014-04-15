@@ -1,0 +1,30 @@
+scn TF01ModuleCreatureStatesSCRIPT
+
+array_var states
+
+int doonce
+
+;float fQuestDelayTime
+
+begin GameMode    
+  if doonce == 0
+    set doonce to 1
+    Print "initialising ModuleCreatureStates"
+	;set fQuestDelayTime to 1000000 ;try
+
+    let states := ar_Construct StringMap
+
+    let states["normal"] := 0
+    let states["dead"] := 1
+    let states["update_inventory"] := 2
+    let states["combat"] := 3
+	let states["starting_limitbreak"] := 4
+	
+    let states["msgbox_waiting"] := 101
+    let states["msgbox_following"] := 102
+    let states["msgbox_follow"] := 103
+    let states["msgbox_summary"] := 104
+    let states["msgbox_profile"] := 105
+    let states["msgbox_attributes"] := 106
+  endif
+end

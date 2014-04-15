@@ -1,0 +1,25 @@
+scn TF01FunctionOpenInventory	; attached to a container/actor reference
+
+ref iter
+
+ref actor
+ref chestRef
+
+begin Function {actor}
+
+	set chestRef to TF01ModuleGlobals.tmp_inventory_chest
+	set TF01ModuleLocks.tmp_inventory_chest_user to actor
+	
+    chestRef.RemoveAllItems
+	
+	foreach iter <- actor
+		if iter.IsEquipped == 0	
+			iter.UnEquipMe
+		endif
+		iter.RemoveMeIR chestRef
+	loop	
+
+	chestRef.activate player, 1
+	
+	SetFunctionValue TF01ModuleCreatureStates.states["update_inventory"]
+end

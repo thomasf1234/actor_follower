@@ -1,0 +1,32 @@
+scn TF01FunctionMsgBoxAttributes
+
+ref actorRef
+
+string_var title
+
+string_var strength_msg
+string_var intelligence_msg
+string_var willpower_msg
+string_var agility_msg
+string_var speed_msg
+string_var endurance_msg
+string_var personality_msg
+string_var luck_msg
+
+begin Function {actorRef}
+  
+  let title        := actorRef.GetName + " Attributes"  
+
+  let strength_msg     := "Strength: " + ToString (actorRef.GetBaseActorValue Blade)  	
+  let intelligence_msg := "Intelligence: " + ToString (actorRef.GetBaseActorValue Intelligence)	
+  let willpower_msg    := "Willpower: " + ToString (actorRef.GetBaseActorValue Willpower)  	
+  let agility_msg      := "Agility: " + ToString (actorRef.GetBaseActorValue Agility)	
+  let speed_msg        := "Speed: " + ToString (actorRef.GetBaseActorValue Speed) 
+  let endurance_msg    := "Endurance: " + ToString (actorRef.GetBaseActorValue Endurance) 
+  let personality_msg  := "Personality: " + ToString (actorRef.GetBaseActorValue Personality)  
+  let luck_msg         := "Luck: " + ToString (actorRef.GetBaseActorValue Luck)
+	
+  MessageBox $title $strength_msg $intelligence_msg $willpower_msg $agility_msg $speed_msg $endurance_msg $personality_msg $luck_msg "____________________" "Cancel"
+  
+  SetFunctionValue TF01ModuleCreatureStates.states["msgbox_attributes"]
+end

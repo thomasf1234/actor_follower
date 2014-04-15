@@ -1,0 +1,159 @@
+scn TestBonesFollowerScript
+;true = 1, false = 0
+
+int state
+int button
+int limit_break_gauge
+
+array_var team_members
+float timer
+float limit_break_timer
+
+ref iter
+ref TeamLeader
+ref my_chest
+string_var msg
+
+ref self
+ref self_package_follow
+
+begin OnActivate
+  if self == 0
+    Message "Initialising self"
+    set self to GetSelf
+	set self_package_follow to Call TF01GetActorPackageFollow self
+  elseif IsActionRef player
+    if self.GetDead
+    elseif self.IsInCombat
+	  let msg := self.GetName + " cannot talk right now"
+      Message $msg
+    elseif self.IsWaiting
+      set state to Call TF01FunctionMsgBoxWaiting
+    elseif self.GetInFaction PlayerFollowersFaction
+      set state to Call TF01FunctionMsgBoxFollowing
+    else
+      set state to Call TF01FunctionMsgBoxFollow
+    endif	
+  endif
+end
+
+;write a script to start autohotkey and then oblivion
+;set random chance to talk?
+;get class
+;state is checked each frame, we have:
+
+
+begin gameMode     
+  if state
+    ;is dead
+    if state == 1
+      if self.GetTimeDead > 0.1 
+	    Call ReanimateCreature self ;must get weapons back etc, maybe keep copy of weapons in chest and add from chest to char on reanimate
+        set state to 0                                                             
+      endif
+	  
+	;needs to update inventory and model
+	elseif eval (state == TF01ModuleCreatureStates.states["update_inventory"])
+	  set state to Call TF01FunctionUpdateCreatureInventory self 
+	  
+	;is in combat
+	elseif state == 3
+	  if self.IsInCombat
+	    if timer > 20 ;check every 20 seconds
+          if Call HealPartyMembers self team_members
+		    set timer to 0 ;restart timer
+		  endif
+        elseif limit_break_gauge > 40 && state != 4;has fulfilled condition for limit break, and is not currently in limit break
+		  Call StartLimitBreakBones self
+          Message "Starting Limit Break!"		  
+		  set state to 4
+		  set limit_break_gauge to 0
+		  set limit_break_timer to 0
+		else
+		  let timer += GetSecondsPassed
+          ;delete when finishedt testing
+          Print "To Heal = " + ToString(Call WhoShouldIHeal team_members self TeamLeader)		  
+        endif		  
+	  else
+	    set state to 0
+	  endif
+	  
+	;LimitBreak
+    elseif state == 4	  
+	  if limit_break_timer > 10 ;45 ;check every 20 seconds
+	    Message "Ending Limit Break!"	
+		set limit_break_timer to 0 ;restart timer
+        set limit_break_gauge to 0		
+		set state to 3
+		Call EndLimitBreakBones self ;will remove items and update 3D
+	  else
+		let limit_break_timer += GetSecondsPassed 
+      endif	  
+	  
+	;if we are on a message box
+	elseif state > 10
+	    set button to GetButtonPressed
+
+		if eval (state == TF01ModuleCreatureStates.states["msgbox_waiting"])
+		  if button > -1
+			set state to Call TF01FunctionMsgBoxWaitingEX self self_package_follow button           	
+		  endif
+
+		;asking while following
+		elseif eval (state == TF01ModuleCreatureStates.states["msgbox_following"])
+		  if button > -1
+			set state to Call TF01FunctionMsgBoxFollowingEX self self_package_follow button 
+		  endif
+
+
+		;asking to follow
+		elseif eval (state == TF01ModuleCreatureStates.states["msgbox_follow"]) 
+		  if button > -1
+			set state to Call TF01FunctionMsgBoxFollowEX self self_package_follow button 
+		  endif
+
+        ;viewing summary
+		elseif eval (state == TF01ModuleCreatureStates.states["msgbox_summary"]) 
+		  if button > -1
+			set state to Call TF01FunctionMsgBoxViewSummaryEX self button 
+		  endif
+		  
+		;viewing profile
+		elseif eval (state == TF01ModuleCreatureStates.states["msgbox_profile"]) 
+		  if button > -1
+			set state to Call TF01FunctionMsgBoxProfileEX self button 
+		  endif
+		
+		;viewing attributes
+		elseif eval (state == TF01ModuleCreatureStates.states["msgbox_attributes"]) 
+		  if button > -1
+			set state to Call TF01FunctionMsgBoxAttributesEX self button 
+		  endif
+		endif		
+
+	endif ;if we are on a message box
+  endif ;end of states
+end 
+
+begin OnDeath
+   set state to 1
+end
+
+begin OnStartCombat
+  set TeamLeader to Player
+  let team_members := TeamLeader.GetFollowers ;update knowledge of team members
+  ar_Append team_members TeamLeader
+  set state to 3 ;fighting, this will begin the timer (the check every second), all followers should start combat at slightly 
+  set timer to 0 ;start timer
+  ;different times and as such should not perform all of the health checks on the same frame
+end
+
+;increment limit_break each time by how much hurt
+begin OnHit
+   let limit_break_gauge += 10
+   ;need to get current health and keep checking the difference to increment limit_break_gauge
+end
+
+;shouldn't be on object
+;begin MenuMode 1001 ;when on a messagebox	  
+;end

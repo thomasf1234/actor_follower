@@ -1,0 +1,17 @@
+scn TF01FunctionUpdateCreatureInventory
+
+ref iter
+ref actor
+
+begin Function {actor}
+  
+  foreach iter <- TF01ModuleGlobals.tmp_inventory_chest
+    ; move item to actor inventory
+    iter.RemoveMeIR actor
+  loop
+  
+  actor.Update3D
+  
+  set TF01ModuleLocks.tmp_inventory_chest_user to 0
+  SetFunctionValue TF01ModuleCreatureStates.states["normal"]
+end

@@ -1,0 +1,16 @@
+scn TF01FunctionMsgBoxProfileEX
+
+ref actor
+
+int button
+
+begin Function {actor, button}
+  
+  SetFunctionValue TF01ModuleCreatureStates.states["normal"]
+  
+  ;"Cancel"
+  if button == 7 ;last button
+	SetFunctionValue (Call TF01FunctionMsgBoxViewSummary actor)
+  endif  
+end
+		  

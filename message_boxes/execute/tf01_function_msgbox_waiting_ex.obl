@@ -1,0 +1,24 @@
+scn TF01FunctionMsgBoxWaitingEX
+
+ref actor
+ref actor_follow_package
+int button
+
+begin Function {actor, actor_follow_package, button}
+
+  SetFunctionValue TF01ModuleCreatureStates.states["normal"]
+  
+  ;"Follow me."
+  if button == 0         
+	actor.StopWaiting actor_follow_package
+    EvaluatePackage
+	
+  ;"It is time for us to part ways."
+  elseif button == 1
+	actor.StopWaiting actor_follow_package
+	actor.SetFactionRank PlayerFollowersFaction -1  ;player faction
+	EvaluatePackage	
+	
+  ;"Nothing." 
+  endif 
+end

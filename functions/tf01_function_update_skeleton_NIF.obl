@@ -1,0 +1,15 @@
+scn TF01FunctionUpdateSkeletonNIF
+
+ref actor
+
+begin OnAdd
+  set actor to TestBonesRef
+  if TF01ModuleLocks.tmp_inventory_chest_user == actor
+    if GetContainer == Player
+	  actor.ToggleCreatureModel "bhelmet.nif" 0
+	else
+	  actor.ToggleCreatureModel "bhelmet.nif" 1
+    endif 
+    actor.Update3D
+  endif
+end

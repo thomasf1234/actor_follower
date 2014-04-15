@@ -1,0 +1,26 @@
+scn TF01ModuleGlobalsSCRIPT
+
+ref tmp_inventory_chest
+array_var creature_types
+
+int doonce
+
+;float fQuestDelayTime
+
+begin GameMode    
+  if doonce == 0
+    set doonce to 1
+	Print "initialising ModuleGlobals"
+	;set fQuestDelayTime to 1000000 ;try
+
+    set tmp_inventory_chest to TestBonesChestRef  ;must change
+	
+	let creature_types := ar_Construct Array
+    let creature_types[0] := "Creature"
+    let creature_types[1] := "Daedra"
+    let creature_types[2] := "Undead"
+    let creature_types[3] := "Humanoid"
+    let creature_types[4] := "Horse"
+    let creature_types[5] := "Giant"
+  endif
+end

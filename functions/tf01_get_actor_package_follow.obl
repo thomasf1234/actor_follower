@@ -1,0 +1,27 @@
+scn TF01GetActorPackageFollow
+
+array_var iter
+
+;//////////////////////////////
+
+ref actor
+ref actor_package
+
+string_var actor_package_type
+
+array_var actor_packages
+
+begin Function {actor}	
+  
+  let actor_packages := actor.GetActorPackages 
+  
+  foreach iter <- actor_packages
+    let actor_package := iter["value"]
+    let actor_package_type := GetPackageType actor_package
+	
+	if eval (!(sv_Compare "Follow" actor_package_type)) ;if actor_package_type == "Follow" ;- sv_Compare returns 0 for match
+      SetFunctionValue actor_package
+	  break
+	endif
+  loop   
+end

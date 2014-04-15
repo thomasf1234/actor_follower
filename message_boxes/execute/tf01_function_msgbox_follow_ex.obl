@@ -1,0 +1,19 @@
+scn TF01FunctionMsgBoxFollowEX
+
+ref actor
+ref actor_follow_package
+int button
+
+begin Function {actor, actor_follow_package, button}
+
+  SetFunctionValue TF01ModuleCreatureStates.states["normal"]
+  
+  ;"Follow me."
+  if button == 0         
+	actor.SetFactionRank PlayerFollowersFaction 1  ;player faction, change to playerfollower faction, put in globals
+    EvaluatePackage
+	
+  ;"Nothing." 
+  endif 
+end
+	  
